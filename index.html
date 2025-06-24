@@ -10,34 +10,31 @@
 </head>
 <body>
 
-  <!-- Where the live stream will appear -->
   <video id="avatar" autoplay playsinline muted></video>
 
   <script type="module">
     import * as DID from "https://cdn.jsdelivr.net/npm/@d-id/client-sdk@latest/+esm";
 
+    /* credentials */
     const agentId  = "agt_lexY7xGc";
-    const auth     = { type: "key",
-                       clientKey: "YXV0aDB8NjgxNTExMzZhZjI4ZmRiMGFmODFhYjZjOlNOR1BFdXJlWnFQRUxxTndWeVNEZg==" };
+    const auth     = { type:"key",
+                       clientKey:"YXV0aDB8NjgxNTExMzZhZjI4ZmRiMGFmODFhYjZjOlNOR1BFdXJlWnFQRUxxTndWeVNEZg==" };
 
-    const videoEl  = document.getElementById("avatar");
-
+    /* wire the video */
+    const vid = document.getElementById("avatar");
     const callbacks = {
-      onSrcObjectReady: stream => {
-        videoEl.srcObject = stream;
-        // kick-start playback just in case
-        videoEl.play().catch(() => {});
-      }
+      onSrcObjectReady: s => { vid.srcObject = s; vid.play().catch(()=>{}); }
     };
 
-    const agentManager = await DID.createAgentManager(
-      agentId,
-      { auth, callbacks, streamOptions: { compatibilityMode: "auto" } }
-    );
+    /* 🔑 streamWarmup=true = start idle loop as soon as we connect */
+    const streamOptions = { compatibilityMode:"auto", streamWarmup:true };
 
-    await agentManager.connect();
-    // Optional greeting:
-    // await agentManager.chat("Hi everyone, welcome to class!");
+    const mgr = await DID.createAgentManager(agentId, { auth, callbacks, streamOptions });
+
+    await mgr.connect();                  // opens WebRTC + idle stream
+
+    /* optional greeting so you know it’s alive */
+    await mgr.chat("Hi everyone, ready for class!");
   </script>
 
 </body>
