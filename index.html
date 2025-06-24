@@ -1,41 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>ARIA Agent — SDK demo</title>
-  <style>
-    body { margin:0; display:flex; justify-content:center; }
-    video { width:360px; height:600px; background:#000; }
-  </style>
+  <meta charset="UTF-8">
+  <title>ARIA Agent</title>
 </head>
 <body>
-
-  <video id="avatar" autoplay playsinline muted></video>
-
-  <script type="module">
-    import * as DID from "https://cdn.jsdelivr.net/npm/@d-id/client-sdk@latest/+esm";
-
-    /* credentials */
-    const agentId  = "agt_lexY7xGc";
-    const auth     = { type:"key",
-                       clientKey:"YXV0aDB8NjgxNTExMzZhZjI4ZmRiMGFmODFhYjZjOlNOR1BFdXJlWnFQRUxxTndWeVNEZg==" };
-
-    /* wire the video */
-    const vid = document.getElementById("avatar");
-    const callbacks = {
-      onSrcObjectReady: s => { vid.srcObject = s; vid.play().catch(()=>{}); }
-    };
-
-    /* 🔑 streamWarmup=true = start idle loop as soon as we connect */
-    const streamOptions = { compatibilityMode:"auto", streamWarmup:true };
-
-    const mgr = await DID.createAgentManager(agentId, { auth, callbacks, streamOptions });
-
-    await mgr.connect();                  // opens WebRTC + idle stream
-
-    /* optional greeting so you know it’s alive */
-    await mgr.chat("Hi everyone, ready for class!");
+  <script type="module"
+    src="https://agent.d-id.com/v1/index.js"
+    data-name="did-agent"
+    data-mode="fabio"
+    data-client-key="YXV0aDB8NjgxNTExMzZhZjI4ZmRiMGFmODFhYjZjOlNOR1BFdXJlWnFQRUxxTndWeVNEZg=="
+    data-agent-id="agt_lexY7xGc"
+    data-monitor="true">
   </script>
-
 </body>
 </html>
