@@ -1,33 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>ARIA Agent</title>
+  <meta charset="UTF-8" />
+  <title>ARIA Agent — SDK demo</title>
+  <style>
+    body { margin:0; display:flex; justify-content:center; }
+    video { width:360px; height:600px; background:#000; }
+  </style>
 </head>
 <body>
 
-  <!-- D-ID widget -->
-  <script type="module"
-    src="https://agent.d-id.com/v1/index.js"
-    data-name="did-agent"
-    data-mode="fabio"
-    data-client-key="YXV0aDB8NjgxNTExMzZhZjI4ZmRiMGFmODFhYjZjOlNOR1BFdXJlWnFQRUxxTndWeVNEZg=="
-    data-agent-id="agt_lexY7xGc"
-    data-monitor="true">
-  </script>
+  <!-- Where the live stream will appear -->
+  <video id="avatar" autoplay playsinline></video>
 
-  <!-- tiny helper to auto-expand the bubble -->
-  <script>
-    // Wait for the page (and the agent) to finish loading
-    window.addEventListener('load', () => {
-      // Give D-ID a moment to paint the bubble, then poke it
-      setTimeout(() => {
-        const agent = document.querySelector('did-agent');
-        // Shadow DOM ninja move: find the bubble’s button and click it
-        const bubbleBtn = agent?.shadowRoot?.querySelector('button');
-        bubbleBtn?.click();
-      }, 3000);   // tweak this delay if the click fires too soon or too late
-    });
+  <!-- SDK loader + minimal glue -->
+  <script type="module">
+    /* 1 — pull the SDK straight from jsDelivr as an ES-module */
+    import * as DID from "https://cdn.jsdelivr.net/npm/@d-id/client-sdk@latest/+esm";
+
+    /* 2 — drop in your credentials */
+    const agentId  = "agt_lexY7xGc";                    // ← from the embed panel
+    const auth     = { type: "key",
+                       clientKey: "YXV0aDB8NjgxNTExMzZhZjI4ZmRiMGFmODFhYjZjOlNOR1BFdXJlWnFQRUxxTndWeVNEZg==" };
+
+    /* 3 — basic callback: pipe the WebRTC track into our <video> element */
+    const videoEl  = document.getElementById("avatar");
+    const callbacks = {
+      onSrcObjectReady: stream => { videoEl.srcObject = stream; }
+    };
+
+    /* 4 — create a manager and connect */
+    const agentManager = await DID.createAgentManager(
+      agentId,
+      { auth, callbacks, streamOptions: { compatibilityMode: "auto" } }
+    );
+
+    await agentManager.connect();          // start streaming idle video
+    // optional greeting:
+    // await agentManager.chat("Hi everyone, welcome to class!");
+
   </script>
 
 </body>
