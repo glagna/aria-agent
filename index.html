@@ -5,6 +5,8 @@
   <title>ARIA Agent</title>
 </head>
 <body>
+
+  <!-- D-ID widget -->
   <script type="module"
     src="https://agent.d-id.com/v1/index.js"
     data-name="did-agent"
@@ -13,5 +15,20 @@
     data-agent-id="agt_lexY7xGc"
     data-monitor="true">
   </script>
+
+  <!-- tiny helper to auto-expand the bubble -->
+  <script>
+    // Wait for the page (and the agent) to finish loading
+    window.addEventListener('load', () => {
+      // Give D-ID a moment to paint the bubble, then poke it
+      setTimeout(() => {
+        const agent = document.querySelector('did-agent');
+        // Shadow DOM ninja move: find the bubble’s button and click it
+        const bubbleBtn = agent?.shadowRoot?.querySelector('button');
+        bubbleBtn?.click();
+      }, 800);   // tweak this delay if the click fires too soon or too late
+    });
+  </script>
+
 </body>
 </html>
