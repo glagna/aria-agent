@@ -2,16 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ARIA Agent</title>
+  <title>ARIA Agent – frame embed</title>
+  <style>
+    body { margin:0; display:flex; justify-content:center; }
+    #aria-frame { width:360px; height:600px; }
+  </style>
 </head>
 <body>
+
+  <!-- The agent will fill this div -->
+  <div id="aria-frame"></div>
+
+  <!-- D-ID frame embed -->
   <script type="module"
-    src="https://agent.d-id.com/v1/index.js"
-    data-name="did-agent"
-    data-mode="fabio"
+    src="https://agent.d-id.com/v2/index.js"
+    data-mode="full"
     data-client-key="YXV0aDB8NjgxNTExMzZhZjI4ZmRiMGFmODFhYjZjOlNOR1BFdXJlWnFQRUxxTndWeVNEZg=="
-    data-agent-id="agt_lexY7xGc"
-    data-monitor="true">
+    data-agent-id="v2_agt_M0v_QmBv"
+    data-name="did-agent"
+    data-monitor="true"
+    data-target-id="aria-frame">
   </script>
+
 </body>
 </html>
